@@ -1,0 +1,47 @@
+services:
+  user-service:
+    host: user-service
+    port: 8081
+  todo-service:
+    host: todo-service
+    port: 8082
+
+db:
+  host: mysql
+  port: 3306
+  username: root
+  password: test
+  schema: ${db.name}
+
+user-service:
+   ribbon:
+      listOfServers: user-service:8081
+todo-service:
+   ribbon:
+      listOfServers: todo-service:8082
+
+spring:
+   jpa:
+      hibernate:
+        ddl-auto: none
+  datasource:
+      url: jdbc:mysql://${db.host}:${db.port}/${db.schema}
+      username: ${db.username}
+      password: ${db.password}
+      driver-class-name: com.mysql.jdbc.Driver
+  cloud:
+      consul:
+        host: consul
+        port: 8500
+        discovery:
+           instance-id: ${spring.application.name}:${random.int}
+
+logging:
+  level:
+      org:
+           springframework:
+             security: INFO
+
+server:
+  port:${services.${spring.application.name}.port}
+
