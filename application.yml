@@ -5,6 +5,9 @@ services:
   todo-service:
     host: todo-service
     port: 8082
+  zuul:
+      host: zuul
+      port: 8080
 
 db:
   host: mysql
@@ -19,6 +22,33 @@ user-service:
 todo-service:
    ribbon:
       listOfServers: todo-service:8082
+
+zuul:
+  routes:
+     users:
+       path: /users/**
+       sensitiveHeaders:
+#       url: http://127.0.0.1:8081
+       serviceId: user-service
+       stripPrefix: false
+     login:
+       path: /login/**
+       sensitiveHeaders:
+#       url: http://127.0.0.1:8081
+       serviceId: user-service
+       stripPrefix: false
+     validate:
+        path: /login/**
+        sensitiveHeaders:
+        #url: http://127.0.0.1:8081
+        serviceId: user-service
+        stripPrefix: false
+     todo-service:
+            path: /todos/**
+            sensitiveHeaders:
+     #       url: http://127.0.0.1:8082
+            serviceId: todo-service
+            stripPrefix: false
 
 spring:
     jpa:
