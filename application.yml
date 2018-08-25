@@ -49,6 +49,8 @@ zuul:
      #       url: http://127.0.0.1:8082
             serviceId: todo-service
             stripPrefix: false
+private:
+    password: zhangtian
 
 spring:
     jpa:
